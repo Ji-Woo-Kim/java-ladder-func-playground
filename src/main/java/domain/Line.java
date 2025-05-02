@@ -16,7 +16,7 @@ public class Line {
     }
 
     public void connect(Random random) {
-        for (int i = 0; i < points.size() - 1; i++) {
+        for (int i = 0; i < points.size() - 1; i++) { // 가로줄 겹침 방지
             if (i > 0 && points.get(i - 1).isConnectedToRight()) {
                 continue;
             }

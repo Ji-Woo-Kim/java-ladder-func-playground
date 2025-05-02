@@ -28,7 +28,7 @@ public class Ladder {
 
     public int getFinalPosition(int startPosition) {
         int currentPosition = startPosition;
-        for (Line line : getLines()) {
+        for (Line line : lines) {
             currentPosition = moveToNextPosition(currentPosition, line);
         }
         return currentPosition;
@@ -47,7 +47,7 @@ public class Ladder {
     }
 
     private boolean canMoveLeft(int currentPosition, List<Point> points) {
-        return currentPosition > 0 && points.get(currentPosition - 1).isConnectedToLeft();
+        return currentPosition > 0 && points.get(currentPosition - 1).isConnectedToRight();
     }
 
     private boolean canMoveRight(int currentPosition, List<Point> points) {
@@ -60,5 +60,9 @@ public class Ladder {
 
     public Width getWidth() {
         return width;
+    }
+
+    public Height getHeight() {
+        return height;
     }
 }
