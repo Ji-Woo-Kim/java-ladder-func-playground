@@ -8,24 +8,26 @@ public class Line {
 
     private final List<Point> points;
 
-    public Line(List<Point> points) {
-        this.points = points;
-    }
-
-    public static Line generate(int width, Random random) {
-        List<Point> result = new ArrayList<>();
-        boolean prevHasLine = false;
-
-        for (int i = 0; i < width - 1; i++) {
-            boolean hasLine = !prevHasLine && random.nextBoolean();
-            result.add(new Point(hasLine));
-            prevHasLine = hasLine;
+    public Line(Width width) {
+        points = new ArrayList<>();
+        for (int i = 0; i < width.value(); i++) {
+            points.add(new Point());
         }
-
-        return new Line(result);
     }
 
-    public List<Point> getLinks() {
+    public void connect(Random random) {
+        for (int i = 0; i < points.size() - 1; i++) {
+            if (i > 0 && points.get(i - 1).isConnectedToRight()) {
+                continue;
+            }
+            if (random.nextBoolean()) {
+                points.get(i).connectToRight();
+                points.get(i + 1).connectToLeft();
+            }
+        }
+    }
+
+    public List<Point> getPoints() {
         return points;
     }
 }

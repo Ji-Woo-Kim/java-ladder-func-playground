@@ -2,13 +2,27 @@ package domain;
 
 public class Point {
 
-    private final Boolean hasRightLine;
+    private boolean connectedToRight;
+    private boolean connectedToLeft;
 
-    public Point(Boolean hasRightLine) {
-        this.hasRightLine = hasRightLine;
+    public Point() {
+        this.connectedToRight = false;
+        this.connectedToLeft = false;
     }
 
-    public Boolean hasRightLine() {
-        return hasRightLine;
+    public boolean isConnectedToRight() {
+        return connectedToRight;
+    }
+
+    public void connectToRight() {
+        this.connectedToRight = true;
+    }
+
+    public boolean isConnectedToLeft() {
+        return connectedToLeft;
+    }
+
+    public void connectToLeft() {
+        this.connectedToLeft = true;
     }
 }
