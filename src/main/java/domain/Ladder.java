@@ -8,12 +8,10 @@ public class Ladder {
 
     private final List<Line> lines;
     private final Width width;
-    private final Height height;
 
-    public Ladder(List<Line> lines, Width width, Height height) {
+    public Ladder(List<Line> lines, Width width) {
         this.lines = lines;
         this.width = width;
-        this.height = height;
     }
 
     public static Ladder generate(Width width, Height height, Random random) {
@@ -23,7 +21,7 @@ public class Ladder {
             line.connect(random);
             lines.add(line);
         }
-        return new Ladder(lines, width, height);
+        return new Ladder(lines, width);
     }
 
     public int getFinalPosition(int startPosition) {
@@ -60,9 +58,5 @@ public class Ladder {
 
     public Width getWidth() {
         return width;
-    }
-
-    public Height getHeight() {
-        return height;
     }
 }

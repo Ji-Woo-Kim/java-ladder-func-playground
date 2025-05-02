@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class InputView {
 
@@ -16,7 +17,10 @@ public class InputView {
         System.out.println("참여할 사람 이름을 입력하세요. (이름은 쉼표(,)로 구분하세요): ");
 
         String userInput = scanner.nextLine();
-        return new ArrayList<>(Arrays.asList(userInput.split(",")));
+        return Arrays.stream(userInput.split(","))
+                .map(String::trim)
+                .filter(name -> !name.isEmpty())
+                .collect(Collectors.toList());
     }
 
     public List<String> readGameResults() {

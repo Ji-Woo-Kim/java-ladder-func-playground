@@ -6,6 +6,7 @@ import java.util.List;
 
 public class OutputView {
 
+    private static final int SPACE_WIDTH = 6;
     private final LadderPrinter ladderPrinter = new LadderPrinter();
 
     public void printLadder(List<String> playerNames, Ladder ladder, List<String> results) {
@@ -19,7 +20,7 @@ public class OutputView {
 
     private void printNames(List<String> names) {
         for (String name : names) {
-            System.out.print(String.format("%-6s", name));
+            System.out.print(String.format("%-" + SPACE_WIDTH + "s", name));
         }
         System.out.println();
     }
