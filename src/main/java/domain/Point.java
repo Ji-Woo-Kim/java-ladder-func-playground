@@ -18,10 +18,6 @@ public class Point {
         this.connectedToRight = true;
     }
 
-    public boolean isConnectedToLeft() {
-        return connectedToLeft;
-    }
-
     public void connectToLeft() {
         this.connectedToLeft = true;
     }

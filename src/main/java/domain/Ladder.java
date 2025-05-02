@@ -36,10 +36,10 @@ public class Ladder {
         List<Point> points = line.getPoints();
 
         if (canMoveLeft(currentPosition, points)) {
-            currentPosition--;
+            return currentPosition - 1;
         }
         if (canMoveRight(currentPosition, points)) {
-            currentPosition++;
+            return currentPosition + 1;
         }
         return currentPosition;
     }
