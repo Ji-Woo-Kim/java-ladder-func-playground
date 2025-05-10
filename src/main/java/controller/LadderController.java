@@ -1,13 +1,13 @@
 package controller;
 
-import domain.Height;
-import domain.Ladder;
-import domain.Width;
+import domain.*;
 import view.InputView;
 import view.OutputView;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class LadderController {
 
@@ -20,58 +20,55 @@ public class LadderController {
     }
 
     public void run() {
-        List<String> playerNames = readValidatedPlayerNames();
-        List<String> gameResults = readValidatedGameResults(playerNames.size());
+        Players players = readPlayers();
+        ResultItems resultItems = readResultItems(players.count());
 
-        Width width = new Width(playerNames.size());
-        Height height = inputView.readHeight();
-        Ladder ladder = Ladder.generate(width, height, new Random());
-        outputView.printLadder(playerNames, ladder, gameResults);
+        LadderHeight height = inputView.readHeight();
+        LadderGame ladderGame = LadderGame.start(players.count(), height, new Random());
 
-        String request = inputView.readResultRequest();
-        handleResultRequest(request, playerNames, ladder, gameResults);
+        List<String> playerNames = players.extractNames();
+        List<String> resultItemNames = resultItems.extractNames();
+        outputView.printLadder(playerNames, ladderGame, resultItemNames);
+
+        String requestName = inputView.readResultRequest();
+        handleResultRequest(requestName, players, ladderGame, resultItems);
     }
 
-    private List<String> readValidatedPlayerNames() {
+    private Players readPlayers() {
         List<String> names = inputView.readPlayerNames();
-        for (String name : names) {
-            if (name.isEmpty() || name.length() > 5) {
-                throw new IllegalArgumentException("참여자 이름은 1자 이상 5자 이하여야 합니다: " + name);
-            }
-        }
-        return names;
+        List<Player> players = names.stream()
+                .map(Player::new)
+                .toList();
+        return new Players(players);
     }
 
-    private List<String> readValidatedGameResults(int expectedSize) {
-        List<String> results = inputView.readGameResults();
-        if (results.size() != expectedSize) {
-            throw new IllegalArgumentException("이름과 결과의 개수가 일치하지 않습니다.");
-        }
-        return results;
+    private ResultItems readResultItems(int expectedSize) {
+        List<String> results = inputView.readResultItems();
+        List<ResultItem> resultItems = results.stream()
+                .map(ResultItem::new)
+                .toList();
+        return new ResultItems(resultItems, expectedSize);
     }
 
-    private void handleResultRequest(String request, List<String> names, Ladder ladder, List<String> results) {
-        while (!request.equals("all")) {// 입력이 'all'이 아닐 때
+    private void handleResultRequest(String request, Players players, LadderGame ladder, ResultItems resultItems) {
+        LadderGameResult gameResult = new LadderGameResult(players, resultItems, ladder);
+
+        while (!request.equals("all")) {
             try {
-                int playerIndex = getValidPlayerIndex(request, names);
-                outputView.printSingleResult(
-                        names.get(playerIndex),
-                        results.get(ladder.getFinalPosition(playerIndex))
-                );
+                Player player = new Player(request);
+                outputView.printSingleResult(player.getName(), gameResult.getSingleResultFor(player).getItem());
             } catch (IllegalArgumentException e) {
                 System.out.println("잘못된 이름입니다. 다시 입력해주세요.");
             }
             request = inputView.readResultRequest();
         }
-        // 'all' 입력될 때
-        outputView.printAllResults(names, results, ladder);
-    }
 
-    private int getValidPlayerIndex(String name, List<String> names) {
-        int index = names.indexOf(name);
-        if (index == -1) {
-            throw new IllegalArgumentException("잘못된 이름입니다: " + name);
-        }
-        return index;
+        Map<String, String> resultMap = gameResult.getAllResults().entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().getName(),
+                        entry -> entry.getValue().getItem()
+                ));
+
+        outputView.printAllResults(resultMap);
     }
 }
