@@ -1,38 +1,32 @@
 package view;
 
-import domain.Ladder;
-import domain.Line;
-import domain.Point;
-
-import java.util.List;
+import domain.LadderGame;
+import domain.LadderLine;
 
 public class LadderPrinter {
 
+    private static final String POINT = "|";
+    private static final String CONNECT_LINE = "-";
+    private static final String NO_CONNECT = " ";
     private static final int CONNECTION_WIDTH = 5;
 
-    public void printLadder(Ladder ladder) {
-        int width = ladder.getWidth().value();
-        for (Line line : ladder.getLines()) {
-            printLine(line, width);
-        }
+    public static void printLadder(LadderGame ladderGame) {
+        ladderGame.getLadderStructure().forEach(LadderPrinter::printLine);
     }
 
-    private void printLine(Line line, int width) {
+    private static void printLine(LadderLine line) {
         StringBuilder lineBuilder = new StringBuilder();
-        List<Point> points = line.getPoints();
 
-        for (int i = 0; i < width; i++) {
-            lineBuilder.append("|");
-            lineBuilder.append(printConnection(points, i));
-        }
+        lineBuilder.append(POINT);  // 첫 번째 세로줄
+        line.getPoints().forEach(point -> {
+            if (point.isConnectedRight()) {
+                lineBuilder.append(CONNECT_LINE.repeat(CONNECTION_WIDTH));
+            } else {
+                lineBuilder.append(NO_CONNECT.repeat(CONNECTION_WIDTH));
+            }
+            lineBuilder.append(POINT);  // 다음 세로줄
+        });
 
         System.out.println(lineBuilder);
-    }
-
-    private String printConnection(List<Point> points, int i) {
-        if (i < points.size() && points.get(i).isConnectedToRight()) {
-            return "-".repeat(CONNECTION_WIDTH);
-        }
-        return " ".repeat(CONNECTION_WIDTH);
     }
 }

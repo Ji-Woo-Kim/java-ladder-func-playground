@@ -1,7 +1,6 @@
 package view;
 
-import domain.Height;
-import domain.Width;
+import domain.LadderHeight;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +22,7 @@ public class InputView {
                 .collect(Collectors.toList());
     }
 
-    public List<String> readGameResults() {
+    public List<String> readResultItems() {
         System.out.println();
         System.out.println("실행 결과를 입력하세요. (결과는 쉼표(,)로 구분하세요): ");
 
@@ -31,12 +30,12 @@ public class InputView {
         return new ArrayList<>(Arrays.asList(userInput.split(",")));
     }
 
-    public Height readHeight() {
+    public LadderHeight readHeight() {
         System.out.println();
         System.out.println("최대 사다리 높이는 몇 개인가요?");
         int height = scanner.nextInt();
         scanner.nextLine();
-        return new Height(height);
+        return new LadderHeight(height);
     }
 
     public String readResultRequest() {
