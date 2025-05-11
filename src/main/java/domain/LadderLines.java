@@ -1,8 +1,7 @@
 package domain;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.IntStream;
 
 public class LadderLines {
 
@@ -12,23 +11,19 @@ public class LadderLines {
         this.lines = List.copyOf(lines);
     }
 
-    public static LadderLines generate(int width, LadderHeight height, Random random) {
-        List<LadderLine> lines = new ArrayList<>();
-        for (int i = 0; i < height.value(); i++) {
-            lines.add(new LadderLine(width, random));
-        }
-
-        return new LadderLines(lines);
+    public static LadderLines of(int width, LadderHeight height, RandomStrategy strategy) {
+        return new LadderLines(
+                IntStream.range(0, height.value())
+                        .mapToObj(i -> new LadderLine(width, strategy))
+                        .toList()
+        );
     }
 
     public int getFinalPosition(int startPosition) {
         int currentPosition = startPosition;
 
         for (LadderLine line : lines) {
-            int nextPosition = line.move(currentPosition);
-            if (nextPosition != currentPosition) {
-                currentPosition = nextPosition;
-            }
+            currentPosition = line.move(currentPosition);
         }
 
         return currentPosition;

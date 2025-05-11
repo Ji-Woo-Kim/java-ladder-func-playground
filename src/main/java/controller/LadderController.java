@@ -6,7 +6,6 @@ import view.OutputView;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class LadderController {
@@ -20,11 +19,12 @@ public class LadderController {
     }
 
     public void run() {
+        System.out.println("Starting Ladder Game..."); // 초기 진입 확인
+
         Players players = readPlayers();
         ResultItems resultItems = readResultItems(players.count());
-
         LadderHeight height = inputView.readHeight();
-        LadderGame ladderGame = LadderGame.start(players.count(), height, new Random());
+        LadderGame ladderGame = LadderGame.of(players.count(), height, new RandomGenerator());
 
         List<String> playerNames = players.extractNames();
         List<String> resultItemNames = resultItems.extractNames();

@@ -1,7 +1,6 @@
 package domain;
 
 import java.util.List;
-import java.util.Random;
 
 public class LadderGame {
 
@@ -11,8 +10,8 @@ public class LadderGame {
         this.ladderLines = ladderLines;
     }
 
-    public static LadderGame start(int width, LadderHeight height, Random random) {
-        return new LadderGame(LadderLines.generate(width, height, random));
+    public static LadderGame of(int width, LadderHeight height, RandomStrategy strategy) {
+        return new LadderGame(LadderLines.of(width, height, strategy));
     }
 
     public int getFinalPosition(int startPosition) {

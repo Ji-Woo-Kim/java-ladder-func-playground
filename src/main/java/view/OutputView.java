@@ -1,7 +1,6 @@
 package view;
 
 import domain.LadderGame;
-import domain.LadderLine;
 
 import java.util.List;
 import java.util.Map;
